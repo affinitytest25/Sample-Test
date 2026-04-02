@@ -8,6 +8,18 @@ def vulnerable_login(username, password):
     cursor.execute(query)
     result = cursor.fetchone()
     if result:
+        print("Login successful!")query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result:
+        print("Login successful!")query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result:
+        print("Login successful!")query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result:
         print("Login successful!")
     else:
         print("Login failed.")
