@@ -4,7 +4,7 @@ import json
 import datetime
 
 class FileService:
-    def __init__(self, user_db, upload_dir):
+    def __init__(self, user_db, user_db, upload_dir):
         self.user_db = user_db
         self.upload_dir = upload_dir
         self.users = []
