@@ -1,0 +1,11 @@
+review:
+  mode: auto   # auto | manual | smart
+  languages: [python, javascript]
+  exclude:
+    - tests/
+    - docs/
+
+learn:
+  enable: true
+  scope: team  # user | team
+  respect_resolution: true
