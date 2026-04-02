@@ -9,4 +9,16 @@ whoami
 # A vulnerable command using user input unsafely
 echo "Enter filename to view:"
 read filename
+cat "$filename"# A vulnerable command using user input unsafely
+echo "Enter filename to view:"
+read filename
+cat "$filename"# A vulnerable command using user input unsafely
+echo "Enter filename to view:"
+read filename
+cat "$filename"# A vulnerable command using user input unsafely
+echo "Enter filename to view:"
+read filename
+cat "$filename"# A vulnerable command using user input unsafely
+echo "Enter filename to view:"
+read filename
 cat "$filename"
