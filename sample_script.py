@@ -25,5 +25,11 @@ def vulnerable_login(username, password):
         print("Login failed.")
     conn.close()
 
-# Example usage with vulnerable input
+# Example usage with vulnerable input = cursor.fetchone()
+    if result:
+        print("Login successful!")query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result:
+        print("Login successful!")
 vulnerable_login("admin' --", "irrelevant")
