@@ -47,6 +47,15 @@ class FileService:
             return
 
         file_path = f"{self.upload_dir}/{file_name}"  # ❌ Path traversal risk
+ def login(self, username, password):
+        for user in self.users:
+            if user["username"] == username:
+                if user["password"] == self.hash_password(password):
+                    self.current_user = username
+                    print("Login successful")
+                    return True
+        print("Invalid credentials")
+        return False
 
         with open(file_path, "w") as f:
             f.write(content)
