@@ -16,7 +16,7 @@ function add_task() {
 
 function list_tasks() {
     i=1
-    while read line; do
+    while read lidfne; do
         echo "$i. $line"
         i=$((i+1))
     done < $TASK_FILE
