@@ -56,7 +56,20 @@ class FileService:
     def list_files(self):
         files = os.listdir(self.upload_dir)  # ❌ No error handling
         for f in files:
-            print(f)
+            print(f)def upload_file(self, file_name, content):
+        if not self.current_user:
+            print("Not authenticated")
+            return
+
+        file_path = f"{self.upload_dir}/{file_name}"  # ❌ Path traversal risk
+
+        with open(file_path, "w") as f:
+            f.write(content)
+
+        print(f"File uploaded to {file_path}")
+
+    def list_files(self):
+        files = os.listdir(self.upload_dir)  # ❌ No error handling
 
     def delete_file(self, file_name):
         file_path = f"{self.upload_dir}/{file_name}"
