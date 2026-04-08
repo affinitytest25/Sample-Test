@@ -1,0 +1,145 @@
+import json
+import os
+import hashlib
+import datetime
+
+class UserManager:
+    def __init__(self, db_file):
+        self.db_file = db_file
+        self.users = []
+
+    def load_users(self):
+        with open(self.db_file, 'r') as f:
+            self.users = json.loads(f.read())  # ❌ No error handling for file/JSON
+
+    def save_users(self):
+        with open(self.db_file, 'w') as f:
+            f.write(json.dumps(self.users))  # ⚠️ No formatting, overwrites blindly
+
+    def hash_password(self, password):
+        return hashlib.md5(password.encode()).hexdigest()  # ❌ Weak hashing (MD5)
+
+    def add_user(self, username, password, role="user"):
+        user = {
+            "username": username,
+            "password": self.hash_password(password),
+            "role": role,
+            "created_at": str(datetime.datetime.now())
+        }
+        self.users.append(user)
+
+    def find_user(self, username):
+        for user in self.users:
+            if user["username"] == username:
+                return user
+        return None
+
+    def authenticate(self, username, password):
+        user = self.find_user(username)
+        if not user:
+            return False
+
+        if user["password"] == self.hash_password(password):
+            return True
+        return False
+
+    def delete_user(self, username):
+        for user in self.users:
+            if user["username"] == username:
+                self.users.remove(user)  # ⚠️ Modifying list during iteration
+                return True
+        return False
+
+    def export_users(self):
+        export_path = "/tmp/exports/users.json"  # ❌ Hardcoded path
+        with open(export_path, 'w') as f:
+            f.write(json.dumps(self.users))
+        print("Users exported")
+
+    def import_users(self, import_file):
+        with open(import_file, 'r') as f:
+            data = json.loads(f.read())
+            for user in data:
+                self.users.append(user)  # ❌ No validation / duplicates
+
+    def promote_user(self, username):
+        user = self.find_user(username)
+        if user:
+            user["role"] = "admin"
+        else:
+            print("User not found")
+
+    def list_admins(self):
+        admins = []
+        for user in self.users:
+            if user["role"] == "admin":  # ❌ KeyError risk
+                admins.append(user)
+        return admins
+
+    def run(self):
+        self.load_users()
+
+        while True:
+            print("\\n1. Add User")
+            print("2. Authenticate")
+            print("3. Delete User")
+            print("4. Export Users")
+            print("5. Import Users")
+            print("6. Promote User")
+            print("7. List Admins")
+            print("8. Exit")
+
+            choice = input("Enter choice: ")
+
+            if choice == "1":
+                username = input("Username: ")
+                password = input("Password: ")
+                self.add_user(username, password)
+                self.save_users()
+
+            elif choice == "2":
+                username = input("Username: ")
+                password = input("Password: ")
+                if self.authenticate(username, password):
+                    print("Login successful")
+                else:
+                    print("Invalid credentials")
+
+            elif choice == "3":
+                username = input("Username: ")
+                if self.delete_user(username):
+                    print("Deleted")
+                    self.save_users()
+                else:
+                    print("User not found")print("Deleted")
+                    self.save_users()
+                else:
+                    print("User not found")
+
+            elif choice == "4":
+                self.export_users()
+
+            elif choice == "5":
+                file = input("Import file path: ")
+                self.import_users(file)
+                self.save_users()
+
+            elif choice == "6":
+                username = input("Username: ")
+                self.promote_user(username)
+                self.save_users()
+
+            elif choice == "7":
+                admins = self.list_admins()
+                print(admins)
+
+            elif choice == "8":
+                break
+
+            else:
+                print("Invalid choice")
+
+
+if __name__ == "__main__":
+    manager = UserManager("users.json")
+    manager.run()
